@@ -1,4 +1,5 @@
 import pygame
+import random
 
 screen = pygame.display.set_mode((500, 500))
 pygame.time.Clock().tick(10)
@@ -20,10 +21,11 @@ while True:
 
         def bounce(self):
             location = [500, 500]
+            color = [255, 255, 255]
             status0 = "up"
             status1 = "up"
             while True:
-                self.draw((255, 255, 255), location)
+                self.draw(color, location)
                 screen.fill((0, 0, 0))
                 if location[0] == 500:
                     status0 = "down"
@@ -41,6 +43,9 @@ while True:
                     location[1] += 1
                 else:
                     location[1] -= 1
+                color[0] = random.randint(0, 255)
+                color[1] = random.randint(0, 255)
+                color[2] = random.randint(0, 255)
 
     mycircle = Circle(50)
     mycircle.bounce()

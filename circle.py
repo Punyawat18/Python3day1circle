@@ -1,6 +1,9 @@
 import pygame
 import random
 
+delay = 10
+delay = int(input("Enter the delay: "))
+
 screen = pygame.display.set_mode((500, 500))
 pygame.time.Clock().tick(10)
 
@@ -46,6 +49,7 @@ mycircle3 = Circle(50, [500, 500])
 mycircle4 = Circle(50, [0, 0])
 
 while True:
+    pygame.time.delay(delay)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()

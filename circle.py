@@ -22,21 +22,26 @@ def move(circle):
 
     circle.location[0] += circle.move_x
     circle.location[1] += circle.move_y
-    circle.color[0] = random.randint(0, 255)
-    circle.color[1] = random.randint(0, 255)
-    circle.color[2] = random.randint(0, 255)
+    circle.delaycount += 1
+    if circle.delaycount == circle.colordelay:
+        circle.delaycount = 0
+        circle.color[0] = random.randint(0, 255)
+        circle.color[1] = random.randint(0, 255)
+        circle.color[2] = random.randint(0, 255)
 
 def draw(circle):
     pygame.draw.circle(screen, circle.color, circle.location, circle.radius)
 
 class Circle:
 
-    def __init__(self, radius, location, color, move_x=1, move_y=1):
+    def __init__(self, radius, location, color, move_x=1, move_y=1, colordelay=0):
         self.radius = radius
         self.location = location
         self.color = color
         self.move_x = move_x
         self.move_y = move_y
+        self.colordelay = colordelay
+        self.delaycount = 0
 
 
 
@@ -45,7 +50,8 @@ for i in range(int(input("Enter the number of circles: "))):
     allcircle.append(Circle(random.randint(1, 100),\
          [random.randint(1, screen_length), random.randint(1, screen_width)],\
              [random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)],\
-                 move_x=random.randint(1, 5), move_y=random.randint(1, 5)))
+                 move_x=random.randint(1, 5), move_y=random.randint(1, 5),\
+                    colordelay=random.randint(1, 100)))
 
 while True:
     pygame.time.delay(delay)

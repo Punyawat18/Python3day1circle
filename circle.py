@@ -1,52 +1,51 @@
 import pygame
 import random
 
-delay = 10
 delay = int(input("Enter the delay: "))
 
-screen = pygame.display.set_mode((500, 500))
+screen_length = int(input("Enter the screen length in pixel: "))
+screen_width = int(input("Enter the screen width in pixel: "))
+screen = pygame.display.set_mode((screen_length, screen_width))
+
 pygame.time.Clock().tick(10)
 
 def move(circle):
 
-    if circle.location[0] == 0:
-        circle.status0 = "up"
-    elif circle.location[0] == 500:
-        circle.status0 = "down"
-    if circle.location[1] == 0:
-        circle.status1 = "up"
-    elif circle.location[1] == 500:
-        circle.status1 = "down"
-    if circle.status0 == "up":
-        circle.location[0] += 1
-    else:
-        circle.location[0] -= 1
-    if circle.status1 == "up":
-        circle.location[1] += 1
-    else:
-        circle.location[1] -= 1
+    if circle.location[0] <= 0:
+        circle.move_x = abs(circle.move_x)
+    elif circle.location[0] >= screen_length:
+        circle.move_x = -abs(circle.move_x)
+    if circle.location[1] <= 0:
+        circle.move_y = abs(circle.move_y)
+    elif circle.location[1] >= screen_width:
+        circle.move_y = -abs(circle.move_y)
 
+    circle.location[0] += circle.move_x
+    circle.location[1] += circle.move_y
     circle.color[0] = random.randint(0, 255)
     circle.color[1] = random.randint(0, 255)
     circle.color[2] = random.randint(0, 255)
 
+def draw(circle):
+    pygame.draw.circle(screen, circle.color, circle.location, circle.radius)
 
 class Circle:
-    def __init__(self, radius, location=[500,500], color=[255, 255, 255], status0="up", status1="up"):
+
+    def __init__(self, radius, location, color, move_x=1, move_y=1):
         self.radius = radius
         self.location = location
         self.color = color
-        self.status0 = status0
-        self.status1 = status1
-
-    def draw(self):
-        pygame.draw.circle(screen, self.color, self.location, self.radius)
+        self.move_x = move_x
+        self.move_y = move_y
 
 
-mycircle1 = Circle(50, [0, 500])
-mycircle2 = Circle(50, [500, 0])
-mycircle3 = Circle(50, [500, 500])
-mycircle4 = Circle(50, [0, 0])
+
+allcircle = []
+for i in range(int(input("Enter the number of circles: "))):
+    allcircle.append(Circle(random.randint(1, 100),\
+         [random.randint(1, screen_length), random.randint(1, screen_width)],\
+             [random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)],\
+                 move_x=random.randint(1, 5), move_y=random.randint(1, 5)))
 
 while True:
     pygame.time.delay(delay)
@@ -54,15 +53,8 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-
-    mycircle1.draw()
-    mycircle2.draw()
-    mycircle3.draw()
-    mycircle4.draw()
-    move(mycircle1)
-    move(mycircle2)
-    move(mycircle3)
-    move(mycircle4)
+    for circle in allcircle:
+        draw(circle)
+        move(circle)
     pygame.display.flip()
     screen.fill((0, 0, 0))
-
